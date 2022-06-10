@@ -16,7 +16,7 @@ let mainFlag = 0;
 let usersIDs = [];
 
 
-socketIo.on('Connection Establised', (socket) => {
+socketIo.on('connection', (socket) => {
 
     //solve douple connecting for same user with two socket ids                                                                                     
     if(mainFlag%2 ==0){
@@ -27,7 +27,7 @@ socketIo.on('Connection Establised', (socket) => {
     if(mainFlag == 1001){
         mainFlag = 0;
     }
-    socketIo.to(socket.id).emit('Initialization Users Chat List',usersIDs);
+    socketIo.to(socket.id).emit('Users Chat List',usersIDs);
 
     /* Handling Users requests */
     socket.on('Connect with a specific user', (socketId, mySocketId) => {
@@ -35,15 +35,15 @@ socketIo.on('Connection Establised', (socket) => {
     });
 
     socket.on('Chatting with specific user', (socketId, mySocketId, msg) => {
-        socketIo.to(socketId).emit('User message',msg);
-        socketIo.to(mySocketId).emit('User message',msg);
+        socketIo.to(socketId).emit('Chatting with specific user message',msg);
+        socketIo.to(mySocketId).emit('Chatting with specific user message',msg);
     });
 
     socket.on('Server Broadcast Chatting message', (msg) => {
         socketIo.emit('Broadcast Chatting message', msg);
     });
 
-    socket.on('Disconnect', () => {
+    socket.on('disconnect', () => {
         usersIDs = usersIDs.filter(client => client !== socket.id);
             socketIo.emit('Users Chat List',usersIDs);
         });

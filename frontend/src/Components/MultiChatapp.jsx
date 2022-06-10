@@ -27,14 +27,14 @@ const MultiChatapp = () => {
     }
 
     useEffect(() =>{
-        socket.on('Initialization Users Chat List', (clientIds) => {
+        socket.on('Users Chat List', (clientIds) => {
             const clietsWithoutMe = clientIds.filter(client => client !== socket.id);
             setUsers(clietsWithoutMe);
         })
         socket.on('Connect with a specific user', (socketId) => {
             setUserID(socketId);
         });
-        socket.on('User message', function(msg) {
+        socket.on('Chatting with specific user message', function(msg) {
             setMessages((prev) => [...prev, msg]);
         });
         socket.on('Broadcast Chatting message', function(msg) {
